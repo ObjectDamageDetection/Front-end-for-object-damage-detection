@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Image Uploader</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Add any CSS stylesheets or JavaScript scripts here -->
+</head>
+<body class=background style="color:white;">
+    
+	<div id="upload-container">
+		<h1 align="center">Object Damage Detection</h1>
+		<form align="center" id="upload-form">
+			<label for="image-input">Select an Image:</label>
+			<input type="file" id="image-input" name="image"><br><br>
+			<button type="submit">Upload</button>
+		</form>
+	</div>
+	
+	<div id="result-container" style="display: none;" align="center">
+		<h1>Result</h1>
+		<div id="result-image"></div>
+	</div>
+
+	<script>
+		const form = document.getElementById('upload-form');
+    const imageInput = document.getElementById('image-input');
+    const resultContainer = document.getElementById('result-container');
+    const resultImage = document.getElementById('result-image');
+
+    form.addEventListener('submit', (event) => {
+    event.preventDefault(); // prevent the form from submitting
+
+    const formData = new FormData();
+    formData.append('image', imageInput.files[0]);
+
+    // send the image data to the server using AJAX
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/upload');
+    xhr.send(formData);
+
+    // show the result container
+    resultContainer.style.display = 'block';
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            // if the server returns a success status, show the processed image
+            resultImage.innerHTML = `<img src="${this.responseText}" alt="Processed Image">`;
+        } else if (this.readyState === 4) {
+            // if there was an error, show an error message
+            resultImage.innerHTML = '<p>Error processing image</p>';
+        }
+    };
+});
+
+	</script>
+    <style>
+        
+        .background{
+            
+            background-image: url(https://media.istockphoto.com/id/1270632735/photo/model-of-atom-and-elementary-particles-physics-concept-3d-rendered-illustration.jpg?b=1&s=170667a&w=0&k=20&c=RmdPpq_NvtgsS0Lq6cEhUur99v_9TmQn1i9c3BdCK2s=);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</body>
+</html>
